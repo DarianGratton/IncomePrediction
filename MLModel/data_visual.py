@@ -7,3 +7,5 @@ import load_data as loader
 data = pd.read_csv("./trainingset.csv")
 print('\n\ndata.info():')
 print(data.info())
+
+print(type(data))
