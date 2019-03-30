@@ -1,10 +1,10 @@
 import pandas as pd
 
 def load_full_data():
-    train_data = pd.read_csv("./trainingset")
-    test_data = pd.read_csv("./testingset")
+    train_data = pd.read_csv("./trainingset.csv")
+    test_data = pd.read_csv("./testingset.csv")
 
-    return train_data
+    return pd.concat([train_data, test_data], axis=0)
 
 def load(datafile):
     return None
