@@ -3,6 +3,25 @@ import numpy as np
 import matplotlib.pyplot as plt
 import load_data as loader
 
+
+def barhplot(data, feature, title):
+    feature_name, counts = np.unique(data.loc[:, str(feature)], return_counts=True)
+    plt.barh(feature_name, counts)
+    plt.title(title)
+    plt.xlabel('count')
+    plt.ylabel(str(feature))
+    for i, v in enumerate(counts):
+        plt.text(v + 3, i, str(v), color='green')
+
+
+def histogram(data, feature, title, bins=20):
+    x = data.loc[:, str(feature)]
+    plt.title(title)
+    plt.xlabel(str(feature))
+    plt.ylabel('Frequency')
+    plt.hist(x, bins=bins)
+
+
 # Load the data
 data = loader.load_full_data()
 
@@ -16,39 +35,21 @@ for feature in data:
     if data[feature].nunique() <= max_unique or str(feature) == 'native-country':
 
         # Create the first bar plot for high donors
-        feature_name, counts = np.unique(hd.loc[:, str(feature)], return_counts=True)
         plt.subplot(2, 1, 1)
-        plt.barh(feature_name, counts)
-        plt.title("Number of each type of person >50K")
-        plt.xlabel('count')
-        plt.ylabel(str(feature))
-        for i, v in enumerate(counts):
-            plt.text(v + 3, i, str(v), color='green')
+        barhplot(hd, feature, "Number of each type of person >50K")
 
         # Create the second bar plot for regular donors
-        feature_name, counts = np.unique(rd.loc[:, str(feature)], return_counts=True)
         plt.subplot(2, 1, 2)
-        plt.barh(feature_name, counts)
-        plt.title("Number of each type of person <=50K")
-        plt.xlabel('count')
-        plt.ylabel(str(feature))
-        for i, v in enumerate(counts):
-            plt.text(v + 3, i, str(v), color='green')
+        barhplot(rd, feature, "Number of each type of person <=50K")
 
     else:
-        x = hd.loc[:, str(feature)]
-        plt.subplot(2, 1, 1)
-        plt.title(str(feature) + " Histogram >50K")
-        plt.xlabel(str(feature))
-        plt.ylabel('Frequency')
-        plt.hist(x, bins=20)
 
-        x = rd.loc[:, str(feature)]
+        # Create histogram for first bar plot
+        plt.subplot(2, 1, 1)
+        histogram(hd, feature, str(feature) + " Histogram >50K")
+
         plt.subplot(2, 1, 2)
-        plt.title(str(feature) + " Histogram <=50K")
-        plt.xlabel(str(feature))
-        plt.ylabel('Frequency')
-        plt.hist(x, bins=20)
+        histogram(rd, feature, str(feature) + " Histogram <=50K")
 
     plt.subplots_adjust(hspace=0.5)
     plt.rcParams["figure.figsize"] = (8, 8)

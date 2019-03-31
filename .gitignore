@@ -5,6 +5,8 @@ MLModel/__pycache__/
 __pycache__/
 *.py[cod]
 *$py.class
+.vscode/
+MLModel/.idea/
 
 # C extensions
 *.so
