@@ -1,9 +1,9 @@
 # Income Prediction with Machine Learning
 Placeholder description
 
-# Quickstart Guide
+## Quickstart Guide
 
-# Dataset (https://archive.ics.uci.edu/ml/datasets/Adult)
+## Dataset (https://archive.ics.uci.edu/ml/datasets/Adult)
 ```
 age: continuous.
 workclass: Private, Self-emp-not-inc, Self-emp-inc, Federal-gov, Local-gov, State-gov, Without-pay, Never-worked.
@@ -21,7 +21,7 @@ hours-per-week: continuous.
 native-country: United-States, Cambodia, England, Puerto-Rico, Canada, Germany, Outlying-US(Guam-USVI-etc), India, Japan, Greece, South, China, Cuba, Iran, Honduras, Philippines, Italy, Poland, Jamaica, Vietnam, Mexico, Portugal, Ireland, France, Dominican-Republic, Laos, Ecuador, Taiwan, Haiti, Columbia, Hungary, Guatemala, Nicaragua, Scotland, Thailand, Yugoslavia, El-Salvador, Trinadad&Tobago, Peru, Hong, Holand-Netherlands.
 ```
 
-# API (Django)
+## API (Django)
 ### POST Income Prediction: api/get_income_prediction
 Parameters
 ```
