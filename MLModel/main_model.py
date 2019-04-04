@@ -29,8 +29,71 @@ test_labels = test_data.loc[:, ['income']]
 
 test_features = loader.get_missing_features(train_features, test_features)
 
-clf = SVC(gamma='auto')
+# Initialize variables
+C = [4, 4.5, 5, 10, 100]
+K = 10
+validation_error_rates = []
+best_error_rate = 1
+best_C = C[0]
+
+for penalty in C:
+
+    # Calculate the size of each subset
+    validation_ratio = 1 / K
+    validation_set_size = int(len(train_data) * validation_ratio)
+
+    # Initialize variable to keep track of the correct predictions
+    validation_correct_pred = 0
+    print("\nPenalty: ", penalty)
+
+    for i in range(K):
+
+        # Calculate and locate the indexes for current validation subset
+        validation_indices = list(range(i * validation_set_size, (i + 1) * validation_set_size))
+        validation_data = train_data.iloc[validation_indices, :]
+        # Prepare validation features and training labels
+        validation_features = validation_data.drop('income', axis=1, inplace=False)
+        validation_labels = validation_data.loc[:, ['income']]
+
+        # Drop the validation set from the training set
+        training_data = train_data.drop(train_data.index[validation_indices])
+        # Prepare training features and training labels
+        train_features = training_data.drop('income', axis=1, inplace=False)
+        train_labels = training_data.loc[:, ['income']]
+
+        # Create the SVC model
+        clf = SVC(C=penalty)
+        # Fit the model
+        clf.fit(train_features, train_labels)
+        # Predict on the validation set
+        pred = clf.predict(validation_features)
+
+        # Check how many are correctly predicted
+        j = 0
+        for predicted in pred:
+            validation_labels_val = validation_labels.iloc[j]
+            if predicted == validation_labels_val.income:
+                validation_correct_pred += 1
+            j += 1
+
+    # Calculate the Error Rate
+    validation_error_rate = (len(train_data) - validation_correct_pred) / len(train_data)
+    print("Error Rate: ", validation_error_rate)
+
+    validation_error_rates.append(validation_error_rate)
+
+    # Check for best C
+    if validation_error_rate < best_error_rate:
+        best_C = penalty
+        best_error_rate = validation_error_rate
+
+print("\nBest Penalty: ", best_C)
+print("Best Error Rate: ", best_error_rate)
+
+# Fit the SVC model
+clf = SVC(C=best_C)
 clf.fit(train_features, train_labels)
+# Predict the output
 pred = clf.predict(test_features)
 
 # Check how many are correctly predicted
