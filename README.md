@@ -23,10 +23,10 @@ native-country: United-States, Cambodia, England, Puerto-Rico, Canada, Germany, 
 
 ## API (Django)
 ### POST Income Prediction: api/get_income_prediction
-Parameters
+Parameters:
 ```
 {
-	token: "token" // Must be an authorized token to proceed with request
+	token: "token", // Must be an authorized token to proceed with request
 	data: {
 		age: String,
 		workclass: String,
@@ -41,6 +41,14 @@ Parameters
 		capital-gain: String,
 		capital-loss: String,
 		hours-per-week: String,
-		native-country: String,
+		native-country: String
+	} // Data is the same as the fields in the dataset
 }
 ```
+Response:
+```
+{
+	prediction: String
+}
+```
+
