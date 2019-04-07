@@ -53,6 +53,7 @@ for feature in data:
 
     plt.tight_layout()
 
+    print(str(feature))
     if str(feature) == 'hours-per-week':
         plt.rcParams["figure.figsize"] = (8, 20)
     else:
