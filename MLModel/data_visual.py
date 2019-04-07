@@ -5,12 +5,12 @@ import load_data as loader
 
 def barhplot(data, feature, title):
     feature_name, counts = np.unique(data.loc[:, str(feature)], return_counts=True)
-    plt.barh(feature_name, counts)
+    plt.barh(feature_name, counts, height=0.3)
     plt.title(title)
     plt.xlabel('count')
     plt.ylabel(str(feature))
     for i, v in enumerate(counts):
-        plt.text(v + 3, i, str(v), color='green')
+        plt.text(v + 3, i, str(v), color='black')
 
 
 def histogram(data, feature, title, bins=20):
@@ -25,6 +25,7 @@ def histogram(data, feature, title, bins=20):
 data = loader.load_full_data()
 
 max_unique = 20     # max number of unique values before it is considered continuous
+i = 1               # to keep track of the number of loops
 for feature in data:
 
     # Separate the dataset into possible high donors and regular donors
@@ -50,7 +51,13 @@ for feature in data:
         plt.subplot(2, 1, 2)
         histogram(rd, feature, str(feature) + " Histogram <=50K")
 
-    plt.subplots_adjust(hspace=0.5)
-    plt.rcParams["figure.figsize"] = (8, 8)
+    plt.tight_layout()
 
+    if str(feature) == 'hours-per-week':
+        plt.rcParams["figure.figsize"] = (8, 20)
+    else:
+        plt.rcParams["figure.figsize"] = (8, 8)
+
+    plt.savefig('graphs/fig' + str(i) + '.png')
     plt.show()
+    i += 1
