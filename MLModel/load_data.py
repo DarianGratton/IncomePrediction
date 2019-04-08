@@ -92,7 +92,7 @@ def print_results_to_csv(actual, predicted):
     if not files_present:
         actual.to_csv(filename)
     else:
-        print('\nFunction:', print_results.__name__)
+        print('\nFunction:', print_results_to_csv.__name__)
         print('WARNING: This file already exists')
 
 

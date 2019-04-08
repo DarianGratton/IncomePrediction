@@ -4,6 +4,13 @@ import load_data as loader
 
 
 def barhplot(data, feature, title):
+    """
+    Creates a horizontal bar plot
+    :param data: Data that feature comes from
+    :param feature: Feature from the data that you want graphed
+    :param title: Title of the graph
+    :return:
+    """
     feature_name, counts = np.unique(data.loc[:, str(feature)], return_counts=True)
     plt.barh(feature_name, counts, height=0.3)
     plt.title(title)
@@ -14,6 +21,14 @@ def barhplot(data, feature, title):
 
 
 def histogram(data, feature, title, bins=20):
+    """
+    Creates a histogram
+    :param data: Data that feature comes from
+    :param feature: Feature from the data that you want graphed
+    :param title: Title of the histogram
+    :param bins: Bins of the histogram
+    :return:
+    """
     x = data.loc[:, str(feature)]
     plt.title(title)
     plt.xlabel(str(feature))
@@ -53,7 +68,6 @@ for feature in data:
 
     plt.tight_layout()
 
-    print(str(feature))
     if str(feature) == 'hours-per-week':
         plt.rcParams["figure.figsize"] = (8, 20)
     else:
