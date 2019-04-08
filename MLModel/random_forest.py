@@ -2,8 +2,10 @@ import pandas as pd
 import numpy as np
 import load_data as loader
 import random
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 
+import warnings
+warnings.filterwarnings("ignore")
 
 # Load the training and testing data
 train_data = loader.load('./trainingset.csv', one_hot_encode=True, max_unique=50)
@@ -40,13 +42,14 @@ test_labels = test_data.loc[:, ['income']]
 test_features = loader.get_missing_features(train_features, test_features)
 
 # Initialize variables
-max_depth = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, None]
+max_depth = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, None]
+n_estimators = [10, 20, 50, 100, 200, 500, 1000]
 K = 5
 validation_error_rates = []
 best_error_rate = 1
-best_depth = max_depth[0]
+best_depth = n_estimators[0]
 
-for depth in max_depth:
+for estimators in n_estimators:
 
     # Calculate the size of each subset
     validation_ratio = 1 / K
@@ -54,7 +57,7 @@ for depth in max_depth:
 
     # Initialize variable to keep track of the correct predictions
     validation_correct_pred = 0
-    print("\nDepth: ", depth)
+    print("\nEstimators: ", estimators)
 
     for i in range(K):
 
@@ -72,7 +75,7 @@ for depth in max_depth:
         train_labels = training_data.loc[:, ['income']]
 
         # Create the SVC model
-        clf = DecisionTreeClassifier(max_depth=depth)
+        clf = RandomForestClassifier(n_estimators=estimators, max_depth=12)
         # Fit the model
         clf.fit(train_features, train_labels)
         # Predict on the validation set
@@ -94,14 +97,14 @@ for depth in max_depth:
 
     # Check for best C
     if validation_error_rate < best_error_rate:
-        best_depth = depth
+        best_depth = estimators
         best_error_rate = validation_error_rate
 
-print("\nBest Depth: ", best_depth)
+print("\nBest Estimators: ", best_depth)
 print("Best Error Rate: ", best_error_rate)
 
 # Fit the SVC model
-clf = DecisionTreeClassifier(max_depth=best_depth)
+clf = RandomForestClassifier(n_estimators=best_depth, max_depth=12)
 clf.fit(train_features, train_labels)
 # Predict the output
 pred = clf.predict(test_features)
@@ -115,5 +118,7 @@ for predicted in pred:
         correct_pred += 1
     j += 1
 
+print(test_labels['income'])
+print(pred)
 error_rate = (len(test_data) - correct_pred) / len(test_data)
 print("Test Set Error Rate: ", error_rate)
