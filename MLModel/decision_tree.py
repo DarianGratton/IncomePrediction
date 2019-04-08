@@ -36,7 +36,7 @@ test_features = loader.get_missing_features(train_features, test_features)
 max_depth = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, None]   # Different depths
 K = 5                                                       # K-fold
 validation_error_rates = []
-best_error_rate = 1
+best_error_rate = 1                                         # Initialized to worst possible error rate
 best_depth = max_depth[0]
 
 for depth in max_depth:
@@ -64,7 +64,7 @@ for depth in max_depth:
         train_features = training_data.drop('income', axis=1, inplace=False)
         train_labels = training_data.loc[:, ['income']]
 
-        # Create the SVC model
+        # Create the decision tree model
         clf = DecisionTreeClassifier(max_depth=depth)
         # Fit the model
         clf.fit(train_features, train_labels)
@@ -113,3 +113,6 @@ for predicted in pred:
 print("F1 Score: ", f1_score(test_labels.values, pred))
 error_rate = (len(test_data) - correct_pred) / len(test_data)
 print("Test Set Error Rate: ", error_rate)
+
+# Print results to file
+loader.print_results_to_csv(test_labels, pred)

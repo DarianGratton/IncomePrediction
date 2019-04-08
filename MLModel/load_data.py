@@ -70,7 +70,7 @@ def get_missing_features(train_data, test_data):
     return new_data
 
 
-def print_results(actual, predicted):
+def print_results_to_csv(actual, predicted):
     """
     Prints results to a .csv file
     :param actual: actual values of the label
@@ -85,13 +85,14 @@ def print_results(actual, predicted):
     # Combine the two Dataframes
     actual['income_pred'] = predicted['income_pred'].values
 
-    filename = 'result.csv'
+    filename = 'results.csv'
     files_present = glob.glob(filename)
 
     # Check if the file already exists
     if not files_present:
         actual.to_csv(filename)
     else:
+        print('\nFunction:', print_results.__name__)
         print('WARNING: This file already exists')
 
 
