@@ -104,7 +104,7 @@ print("\nBest Estimators: ", best_depth)
 print("Best Error Rate: ", best_error_rate)
 
 # Fit the SVC model
-clf = RandomForestClassifier(n_estimators=best_depth, max_depth=12)
+clf = RandomForestClassifier(n_estimators=500, max_depth=13)
 clf.fit(train_features, train_labels)
 # Predict the output
 pred = clf.predict(test_features)
@@ -118,7 +118,6 @@ for predicted in pred:
         correct_pred += 1
     j += 1
 
-print(test_labels['income'])
-print(pred)
+loader.print_results(test_labels, pred)
 error_rate = (len(test_data) - correct_pred) / len(test_data)
 print("Test Set Error Rate: ", error_rate)

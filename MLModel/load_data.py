@@ -59,3 +59,13 @@ def get_missing_features(train_data, test_data):
         new_data[feature] = 0
 
     return new_data
+
+
+def print_results(actual, predicted):
+
+    if not isinstance(predicted, pd.DataFrame):
+        d = {'income_pred': predicted}
+        predicted = pd.DataFrame(data=d)
+
+    actual['income_pred'] = predicted['income_pred'].values
+    actual.to_csv('./results.csv')
