@@ -1,8 +1,14 @@
 import pandas as pd
 import numpy as np
+import pickle
+import glob
 
 
 def load_full_data():
+    """
+    Loads the full data set given (currently split in a training set and test set)
+    :return: Dataframe containing all the samples from the training set and test set
+    """
     train_data = pd.read_csv("./trainingset.csv")
     test_data = pd.read_csv("./testingset.csv")
 
@@ -13,15 +19,18 @@ def load(file_path, one_hot_encode=False, max_unique=20):
     """
     Load a .csv file
     :param file_path: path to .csv
-    :param one_hot_encode: (opt) if true, applies one-hot encoding on columns with less than 'max_unique' values (ignores if 2 (1 and 0))
+    :param one_hot_encode: (opt) if true, applies one-hot encoding on columns with less than 'max_unique' values
     :param max_unique: (opt) upper bound of one-hot encoded unique columns
     :return: one-hot encoded data in format pd.data
     """
+    # Read the file
     data = pd.read_csv(file_path)
 
+    # Convert income to binary
     data.loc[data['income'] == '>50K', 'income'] = 1
     data.loc[data['income'] == '<=50K', 'income'] = 0
 
+    # Hot encode the features that have < max_unique
     if one_hot_encode:
         hot_encoding_indices = []
         for col in data:
@@ -62,10 +71,34 @@ def get_missing_features(train_data, test_data):
 
 
 def print_results(actual, predicted):
-
+    """
+    Prints results to a .csv file
+    :param actual: actual values of the label
+    :param predicted: predicted values of the label
+    :return:
+    """
+    # Check if predicted is a dataframe
     if not isinstance(predicted, pd.DataFrame):
         d = {'income_pred': predicted}
         predicted = pd.DataFrame(data=d)
 
+    # Combine the two Dataframes
     actual['income_pred'] = predicted['income_pred'].values
-    actual.to_csv('./results.csv')
+
+    filename = 'result.csv'
+    files_present = glob.glob(filename)
+
+    # Check if the file already exists
+    if not files_present:
+        actual.to_csv(filename)
+    else:
+        print('WARNING: This file already exists')
+
+
+def save_model(trained_model):
+    """
+    Save trained model to a file
+    :param trained_model: The trained model
+    """
+    filename = 'finalized_model.sav'
+    pickle.dump(trained_model, open(filename, 'wb'))

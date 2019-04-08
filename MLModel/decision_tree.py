@@ -2,21 +2,13 @@ import pandas as pd
 import numpy as np
 import load_data as loader
 import random
+from sklearn.metrics import f1_score
 from sklearn.tree import DecisionTreeClassifier
 
 
 # Load the training and testing data
 train_data = loader.load('./trainingset.csv', one_hot_encode=True, max_unique=50)
 test_data = loader.load('./testingset.csv', one_hot_encode=True, max_unique=50)
-
-# # Remove unwanted features
-# train_data = train_data.drop(['native-country', 'race_Amer-Indian-Eskimo', 'race_Asian-Pac-Islander', 'race_Black',
-#                               'race_Other', 'race_White', 'capital-gain', 'capital-loss', 'fnlwgt'], axis=1, inplace=False)
-# test_data = test_data.drop(['native-country', 'race_Amer-Indian-Eskimo', 'race_Asian-Pac-Islander', 'race_Black',
-#                               'race_Other', 'race_White', 'capital-gain', 'capital-loss', 'fnlwgt'], axis=1, inplace=False)
-#
-# print(test_data.info())
-# print(train_data.info())
 
 # Number of samples in the train_data
 num_rows = train_data.shape[0]
@@ -37,11 +29,12 @@ train_labels = train_data.loc[:, ['income']]
 test_features = test_data.drop('income', axis=1, inplace=False)
 test_labels = test_data.loc[:, ['income']]
 
+# Ensures the features of the training set and testing set are the same
 test_features = loader.get_missing_features(train_features, test_features)
 
-# Initialize variables
-max_depth = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, None]
-K = 5
+# Initialize variables for Cross-validation
+max_depth = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, None]   # Different depths
+K = 5                                                       # K-fold
 validation_error_rates = []
 best_error_rate = 1
 best_depth = max_depth[0]
@@ -103,6 +96,8 @@ print("Best Error Rate: ", best_error_rate)
 # Fit the SVC model
 clf = DecisionTreeClassifier(max_depth=best_depth)
 clf.fit(train_features, train_labels)
+# Save the Model for later
+loader.save_model(clf)
 # Predict the output
 pred = clf.predict(test_features)
 
@@ -115,5 +110,6 @@ for predicted in pred:
         correct_pred += 1
     j += 1
 
+print("F1 Score: ", f1_score(test_labels.values, pred))
 error_rate = (len(test_data) - correct_pred) / len(test_data)
 print("Test Set Error Rate: ", error_rate)
