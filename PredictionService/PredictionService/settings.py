@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # My Own Apps
-    'predictions'
+    'Predictions'
 ]
 
 REST_FRAMEWORK = {
