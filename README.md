@@ -30,7 +30,7 @@ http post http://127.0.0.1:8000/api/token/ username=your_username password=your_
 ```
 Step 8: Open Postman (https://www.getpostman.com/)
 Step 9: Change to a post request, input the api call, and set up authorization by clicking type -> Bearer Token and pasting the token where it says token
-![postman](https://github.com/Trilobite256/IncomePrediction/blob/master/images/Postman.PNG?raw=true)
+![postman](https://github.com/Trilobite256/IncomePrediction/blob/master/images/Postman1.PNG?raw=true)
 Step 10: Click on the body tab, select raw, insert json, and change type to JSON (application/json)
 ```
 // JSON to insert
