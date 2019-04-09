@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import data_handler as handler
+import modules.data_handler as handler
 import random
 from sklearn.metrics import f1_score
 from sklearn.ensemble import RandomForestClassifier

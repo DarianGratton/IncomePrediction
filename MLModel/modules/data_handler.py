@@ -10,8 +10,8 @@ def load_full_data():
     Loads the full data set given (currently split in a training set and test set)
     :return: Dataframe containing all the samples from the training set and test set
     """
-    train_data = pd.read_csv("./trainingset.csv")
-    test_data = pd.read_csv("./testingset.csv")
+    train_data = pd.read_csv("../trainingset.csv")
+    test_data = pd.read_csv("../testingset.csv")
 
     return pd.concat([train_data, test_data], axis=0)
 
@@ -122,7 +122,7 @@ def save_model(trained_model):
     pickle.dump(trained_model, open(filename, 'wb'))
 
 
-def predict_income():
+def predict_income(jsondata):
 
     data = \
         '{ "age": 43, ' \

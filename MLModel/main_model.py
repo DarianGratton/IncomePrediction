@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import data_handler as handler
+import modules.data_handler as handler
 import random
 from sklearn.metrics import f1_score
 from sklearn.tree import DecisionTreeClassifier
@@ -116,4 +116,4 @@ from sklearn.tree import DecisionTreeClassifier
 #
 # # Print results to file
 # handler.print_results_to_csv(test_labels, pred)
-handler.predict_income()
+handler.predict_income(None)
