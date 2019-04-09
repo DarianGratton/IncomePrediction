@@ -27,7 +27,7 @@ python manage.py createsuperuser   // Email is uneccessary
 ```
 Step 7: Get a token using Httpie then copy it to clipboard
 ```
-http post http://127.0.0.1:8000/api/token/ username=your_username password=your_password
+http post http://127.0.0.1:8000/api/token username=your_username password=your_password
 ```
 Step 8: Open Postman (https://www.getpostman.com/)
 
