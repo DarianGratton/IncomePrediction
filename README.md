@@ -26,24 +26,21 @@ native-country: United-States, Cambodia, England, Puerto-Rico, Canada, Germany, 
 Parameters:
 ```
 {
-	token: "token", // Must be an authorized token to proceed with request
-	data: {
-		age: String,
-		workclass: String,
-		fnlwgt: String,
-		education: String,
-		education-num: String,
-		marital-status: String,
-		occupation: String,
-		relationship: String,
-		race: String,
-		sex: String,
-		capital-gain: String,
-		capital-loss: String,
-		hours-per-week: String,
-		native-country: String
-	} // Data is the same as the fields in the dataset
-}
+	age: String,
+	workclass: String,
+	fnlwgt: String,
+	education: String,
+	education-num: String,
+	marital-status: String,
+	occupation: String,
+	relationship: String,
+	race: String,
+	sex: String,
+	capital-gain: String,
+	capital-loss: String,
+	hours-per-week: String,
+	native-country: String
+} // Data is the same as the fields in the dataset
 ```
 Response:
 ```
@@ -51,4 +48,5 @@ Response:
 	prediction: String
 }
 ```
-
+### POST Token: api/token
+### POST Token Refresh: api/token/refresh
