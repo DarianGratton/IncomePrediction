@@ -45,9 +45,9 @@ def load(file_path, one_hot_encode=False, max_unique=20):
 
 def one_hot_encode(data, max_unique=20):
     """
-
-    :param data:
-    :param max_unique:
+    One Hot Encodes the dataframe
+    :param data: the data to hot encode
+    :param max_unique: upper bound of one-hot encoded unique columns
     :return:
     """
     hot_encoding_indices = []
@@ -119,51 +119,5 @@ def save_model(trained_model):
     Save trained model to a file
     :param trained_model: The trained model
     """
-    filename = 'finalized_model.sav'
+    filename = './model_cache/finalized_model.pkl'
     pickle.dump(trained_model, open(filename, 'wb'))
-
-
-def predict_income(jsondata):
-
-    data = \
-        '{ "age": 43, ' \
-        '"workclass": "Never-worked",' \
-        '"fnlwgt": 70800,' \
-        '"education": "Bachelors",' \
-        '"education-num": 13,' \
-        '"marital-status": "Never-married",' \
-        '"occupation": "?",' \
-        '"relationship": "Unmarried",' \
-        '"race": "Black",' \
-        '"sex": "Male",' \
-        '"capital-gain": 0,' \
-        '"capital-loss": 0,' \
-        '"hours-per-week": 40,' \
-        '"native-country": "United-States",' \
-        '"income": 0' \
-        '}'
-
-    # Parse the Json file
-    donor = json.loads(data)
-    dataframe = pd.DataFrame(data=donor, index=[0])
-
-    # Ensure that the received data has the same features as the full data
-    full_data = load_full_data()
-    new_data = pd.concat([full_data, dataframe], axis=0)
-    new_data = one_hot_encode(new_data, max_unique=50)
-
-    # Prepare features
-    features = new_data.drop('income', axis=1, inplace=False)
-    # Get the sample to predict
-    features = features.iloc[-1]
-
-    # Load the model and predict
-    filename = "../finalized_model.sav"
-    loaded_model = pickle.load(open(filename, 'rb'))
-    pred = loaded_model.predict([features])
-
-    if pred[0] == 0:
-        return "Regular Donor"
-    else:
-        return "High Donor"
-

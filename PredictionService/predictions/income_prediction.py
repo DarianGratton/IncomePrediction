@@ -140,20 +140,28 @@ def get_fullset_of_features():
 
 
 def predict_income(data):
-
+    """
+    Predict the income of the data
+    :param data: The data received from the request
+    :return: A string containing the outcome
+    """
+    # Get the model from the cache
     model_cache_key = 'model_cache'
     model_rel_path = "predictions/predictionmodel/model_cache/finalized_model.pkl"
 
     model = cache.get(model_cache_key)
 
+    # Check if not in cache save in cache
     if not model:
         model_path = os.path.realpath(model_rel_path)
         model = joblib.load(model_path)
         # save in django memory cache
         cache.set(model_cache_key, model, None)
 
+    # Change the received data into a dataframe
     donor_df = pd.DataFrame(data=data, index=[0])
 
+    # Loop through each of the full data's features and update the values based on the values in the received data
     full_data = get_fullset_of_features()
     for feature in donor_df:
         for hot_encoded_feature in full_data:
@@ -164,10 +172,12 @@ def predict_income(data):
                 full_data.at[0, str(hot_encoded_feature)] = 1
                 continue
 
+    # Predict an outcome
     pred = model.predict(full_data)
 
     if pred[0] == 0:
         return "<=50"
-    else:
+    elif pred[0] == 1:
         return ">50"
 
+    return "Warning: An error occurred"

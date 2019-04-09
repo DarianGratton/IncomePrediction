@@ -2,23 +2,13 @@ import pandas as pd
 import numpy as np
 import modules.data_handler as handler
 import random
-from sklearn.svm import SVC
-import warnings
+from sklearn.metrics import f1_score
+from sklearn.tree import DecisionTreeClassifier
 
-warnings.filterwarnings("ignore")
 
 # Load the training and testing data
-train_data = handler.load('./trainingset.csv', one_hot_encode=True, max_unique=20)
-test_data = handler.load('./testingset.csv', one_hot_encode=True, max_unique=20)
-
-# Remove unwanted features
-train_data = train_data.drop(['native-country', 'race_Amer-Indian-Eskimo', 'race_Asian-Pac-Islander', 'race_Black',
-                              'race_Other', 'race_White', 'capital-gain', 'capital-loss', 'fnlwgt'], axis=1, inplace=False)
-test_data = test_data.drop(['native-country', 'race_Amer-Indian-Eskimo', 'race_Asian-Pac-Islander', 'race_Black',
-                              'race_Other', 'race_White', 'capital-gain', 'capital-loss', 'fnlwgt'], axis=1, inplace=False)
-
-print(test_data.info())
-print(train_data.info())
+train_data = handler.load('./trainingset.csv', one_hot_encode=True, max_unique=50)
+test_data = handler.load('./testingset.csv', one_hot_encode=True, max_unique=50)
 
 # Number of samples in the train_data
 num_rows = train_data.shape[0]
@@ -39,16 +29,17 @@ train_labels = train_data.loc[:, ['income']]
 test_features = test_data.drop('income', axis=1, inplace=False)
 test_labels = test_data.loc[:, ['income']]
 
+# Ensures the features of the training set and testing set are the same
 test_features = handler.get_missing_features(train_features, test_features)
 
-# Initialize variables
-C = [0.01, 0.1, 1, 4, 4.5, 5, 10]
-K = 5
+# Initialize variables for Cross-validation
+max_depth = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, None]   # Different depths
+K = 5                                                       # K-fold
 validation_error_rates = []
-best_error_rate = 1
-best_C = C[0]
+best_error_rate = 1                                         # Initialized to worst possible error rate
+best_depth = max_depth[0]
 
-for penalty in C:
+for depth in max_depth:
 
     # Calculate the size of each subset
     validation_ratio = 1 / K
@@ -56,7 +47,7 @@ for penalty in C:
 
     # Initialize variable to keep track of the correct predictions
     validation_correct_pred = 0
-    print("\nPenalty: ", penalty)
+    print("\nDepth: ", depth)
 
     for i in range(K):
 
@@ -73,8 +64,8 @@ for penalty in C:
         train_features = training_data.drop('income', axis=1, inplace=False)
         train_labels = training_data.loc[:, ['income']]
 
-        # Create the SVC model
-        clf = SVC(C=penalty, kernel='sigmoid')
+        # Create the decision tree model
+        clf = DecisionTreeClassifier(max_depth=depth)
         # Fit the model
         clf.fit(train_features, train_labels)
         # Predict on the validation set
@@ -96,15 +87,18 @@ for penalty in C:
 
     # Check for best C
     if validation_error_rate < best_error_rate:
-        best_C = penalty
+        best_depth = depth
         best_error_rate = validation_error_rate
 
-print("\nBest Penalty: ", best_C)
+print("\nBest Depth: ", best_depth)
 print("Best Error Rate: ", best_error_rate)
 
 # Fit the SVC model
-clf = SVC(C=best_C, kernel='sigmoid')
+clf = DecisionTreeClassifier(max_depth=best_depth)
 clf.fit(train_features, train_labels)
+print(train_features.info())
+# Save the Model for later
+handler.save_model(clf)
 # Predict the output
 pred = clf.predict(test_features)
 
@@ -117,5 +111,9 @@ for predicted in pred:
         correct_pred += 1
     j += 1
 
+print("F1 Score: ", f1_score(test_labels.values, pred))
 error_rate = (len(test_data) - correct_pred) / len(test_data)
 print("Test Set Error Rate: ", error_rate)
+
+# Print results to file (Debug)
+# handler.print_results_to_csv(test_labels, pred)
