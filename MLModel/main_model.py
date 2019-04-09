@@ -96,6 +96,7 @@ from sklearn.tree import DecisionTreeClassifier
 # # Fit the SVC model
 # clf = DecisionTreeClassifier(max_depth=best_depth)
 # clf.fit(train_features, train_labels)
+# print(train_features.info())
 # # Save the Model for later
 # handler.save_model(clf)
 # # Predict the output
@@ -114,6 +115,6 @@ from sklearn.tree import DecisionTreeClassifier
 # error_rate = (len(test_data) - correct_pred) / len(test_data)
 # print("Test Set Error Rate: ", error_rate)
 #
-# # Print results to file
+# # Print results to file (Debug)
 # handler.print_results_to_csv(test_labels, pred)
-handler.predict_income(None)
+print(handler.predict_income(None))

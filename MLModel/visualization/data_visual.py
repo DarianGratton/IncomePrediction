@@ -1,6 +1,7 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
-import MLModel.data_handler as handler
+import MLModel.modules.data_handler as handler
 
 
 def barhplot(data, feature, title):
@@ -38,6 +39,7 @@ def histogram(data, feature, title, bins=20):
 
 # Load the data
 data = handler.load_full_data()
+new_data = handler.one_hot_encode(data, max_unique=50)
 
 max_unique = 20     # max number of unique values before it is considered continuous
 i = 1               # to keep track of the number of loops

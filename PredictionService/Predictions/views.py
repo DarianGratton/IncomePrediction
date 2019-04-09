@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import JSONParser
-import IncomePrediction.MLModel.data_handler as handler
+from .income_prediction import predict_income
 
 
 # Create your views here.
@@ -12,6 +12,6 @@ class PredictionView(APIView):
     parser_classes = (JSONParser,)
 
     def post(self, request):
-        prediction = handler.predict_income(request.data)
-        content = {'prediction': request.data}
+        prediction = predict_income(request.data)
+        content = {'prediction': prediction}
         return Response(content)
