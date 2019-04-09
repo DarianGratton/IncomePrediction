@@ -2,7 +2,7 @@
 A microservice built using django and python that takes a api call with a json object (containing user infomation), and returns a prediction of how much they make annually.  
 
 ## How to run
-Step 1: Clone repo and navigate to it in the command line
+Step 1: Clone repo and navigate to it in the command line\n
 Step 2: Set up a virtual environment
 ```
 virtualenv environment_name   // Windows, different on MAC and Linux
