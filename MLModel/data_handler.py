@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import pickle
 import glob
+import json
 
 
 def load_full_data():
@@ -37,6 +38,22 @@ def load(file_path, one_hot_encode=False, max_unique=20):
             if 1 < data[col].nunique() < max_unique and str(col) != 'income':
                 hot_encoding_indices.append(col)
         data = pd.get_dummies(data, columns=hot_encoding_indices, prefix=hot_encoding_indices)
+
+    return data
+
+
+def one_hot_encode(data, max_unique=20):
+    """
+
+    :param data:
+    :param max_unique:
+    :return:
+    """
+    hot_encoding_indices = []
+    for col in data:
+        if 1 < data[col].nunique() < max_unique and str(col) != 'income':
+            hot_encoding_indices.append(col)
+    data = pd.get_dummies(data, columns=hot_encoding_indices, prefix=hot_encoding_indices)
 
     return data
 
@@ -103,3 +120,49 @@ def save_model(trained_model):
     """
     filename = 'finalized_model.sav'
     pickle.dump(trained_model, open(filename, 'wb'))
+
+
+def predict_income():
+
+    data = \
+        '{ "age": 43, ' \
+        '"workclass": "Never-worked",' \
+        '"fnlwgt": 70800,' \
+        '"education": "Bachelors",' \
+        '"education-num": 13,' \
+        '"marital-status": "Never-married",' \
+        '"occupation": "?",' \
+        '"relationship": "Unmarried",' \
+        '"race": "Black",' \
+        '"sex": "Male",' \
+        '"capital-gain": 0,' \
+        '"capital-loss": 0,' \
+        '"hours-per-week": 40,' \
+        '"native-country": "United-States",' \
+        '"income": 0' \
+        '}'
+
+    # Parse the Json file
+    donor = json.loads(data)
+    dataframe = pd.DataFrame(data=donor, index=[0])
+
+    # Ensure that the received data has the same features as the full data
+    full_data = load_full_data()
+    new_data = pd.concat([full_data, dataframe], axis=0)
+    new_data = one_hot_encode(new_data, max_unique=50)
+
+    # Prepare features
+    features = new_data.drop('income', axis=1, inplace=False)
+    # Get the sample to predict
+    features = features.iloc[-1]
+
+    # Load the model and predict
+    filename = "finalized_model.sav"
+    loaded_model = pickle.load(open(filename, 'rb'))
+    pred = loaded_model.predict([features])
+
+    if pred[0] == 0:
+        return "Regular Donor"
+    else:
+        return "High Donor"
+

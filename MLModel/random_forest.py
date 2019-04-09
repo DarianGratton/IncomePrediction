@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import load_data as loader
+import data_handler as handler
 import random
 from sklearn.metrics import f1_score
 from sklearn.ensemble import RandomForestClassifier
@@ -9,8 +9,8 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # Load the training and testing data
-train_data = loader.load('./trainingset.csv', one_hot_encode=True, max_unique=50)
-test_data = loader.load('./testingset.csv', one_hot_encode=True, max_unique=50)
+train_data = handler.load('./trainingset.csv', one_hot_encode=True, max_unique=50)
+test_data = handler.load('./testingset.csv', one_hot_encode=True, max_unique=50)
 
 # # Remove unwanted features
 # train_data = train_data.drop(['native-country', 'race_Amer-Indian-Eskimo', 'race_Asian-Pac-Islander', 'race_Black',
@@ -40,7 +40,7 @@ train_labels = train_data.loc[:, ['income']]
 test_features = test_data.drop('income', axis=1, inplace=False)
 test_labels = test_data.loc[:, ['income']]
 
-test_features = loader.get_missing_features(train_features, test_features)
+test_features = handler.get_missing_features(train_features, test_features)
 
 # Initialize variables for Cross-Validation
 n_estimators = [10, 20, 50, 100, 200, 500, 1000]    # Different estimators
@@ -123,4 +123,4 @@ error_rate = (len(test_data) - correct_pred) / len(test_data)
 print("Test Set Error Rate: ", error_rate)
 
 # Print results to file
-loader.print_results_to_csv(test_labels, pred)
+handler.print_results_to_csv(test_labels, pred)
