@@ -1,7 +1,58 @@
 # Income Prediction with Machine Learning
 A microservice built using django and python that takes a api call with a json object (containing user infomation), and returns a prediction of how much they make annually.  
 
-## Quickstart Guide
+## How to run
+Step 1: Clone repo and navigate to it in the command line
+Step 2: Set up a virtual environment
+```
+virtualenv environment_name   // Windows, different on MAC and Linux
+```
+Step 3: Run the environment
+```
+.\environment_name\Scripts\activate
+```
+Step 4: Download the dependencies
+```
+pip install -r requirements.txt
+```
+Step 5: Navigate to the Django project (PredictionService) and run server
+```
+python manage.py migrate
+python manage.py runserver
+```
+Step 6: Open a new command line, navigate back, start environment again and then create super user (Neccessary for Token)
+```
+python manage.py createsuperuser   // Email is uneccessary
+```
+Step 7: Get a token using Httpie then copy it to clipboard
+```
+http post http://127.0.0.1:8000/api/token/ username=your_username password=your_password
+```
+Step 8: Open Postman (https://www.getpostman.com/)
+Step 9: Change to a post request, input the api call, and set up authorization by clicking type -> Bearer Token and pasting the token where it says token
+![postman](https://github.com/Trilobite256/IncomePrediction/blob/master/images/Postman.PNG?raw=true)
+Step 10: Click on the body tab, select raw, insert json, and change type to JSON (application/json)
+```
+// JSON to insert
+{ 
+	"age": 43,
+	"workclass": "Never-worked",
+	"fnlwgt": 70800,
+	"education": "Bachelors",
+	"education-num": 13,
+	"marital-status": "Never-married",
+	"occupation": "?",
+	"relationship": "Unmarried",
+	"race": "Black",
+	"sex": "Male",
+	"capital-gain": 0,
+	"capital-loss": 0,
+	"hours-per-week": 40,
+	"native-country": "United-States"
+}
+```
+![postman2](https://github.com/Trilobite256/IncomePrediction/blob/master/images/Postman2.PNG?raw=true)
+Step 11: Click send (Note if it says invalid token, it probably expired, just get a new one)
 
 ## Dataset (https://archive.ics.uci.edu/ml/datasets/Adult)
 ```
@@ -50,11 +101,11 @@ Response:
 ```
 
 ## Unfinished
-# Deployment
+### Deployment
 Was unable to deploy in time but I would probably try to deploy it on heroku, as it offers free SSL and is fairly easy to set up once you know what your doing (it's also free which is nice). However given the time I would probably look into services like aws and azure as I know that they could probably offer more in the long term. 
 
-# Testing
-In terms of integration testing I spent a large chunk of time testing and ensuring the machine learning model worked when given the right information. However I wasn't able to spend much time testing how it would react given the wrong type of infomation. In terms of unit testing I would of liked to add more, I spend a lot of time manual testing which isn't great long term.  
+### Testing
+In terms of integration testing I spent a large chunk of time testing and ensuring the machine learning model worked when given the right information. However I wasn't able to spend much time testing how it would react given the wrong type of infomation. 
 
 ## Sources
 https://github.com/jadianes/winerama-recommender-tutorial/tree/master/winerama
