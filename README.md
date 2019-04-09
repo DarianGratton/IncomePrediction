@@ -110,8 +110,4 @@ Was unable to deploy in time but I would probably try to deploy it on heroku, as
 In terms of integration testing I spent a large chunk of time testing and ensuring the machine learning model worked when given the right information. However I wasn't able to spend much time testing how it would react given the wrong type of infomation. 
 
 ## Sources
-https://github.com/jadianes/winerama-recommender-tutorial/tree/master/winerama
-
-https://github.com/wkudaka/django-scikit-learn-tutorial
-
 http://cseweb.ucsd.edu/classes/sp15/cse190-c/reports/sp15/048.pdf
