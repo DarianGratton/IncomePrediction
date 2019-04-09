@@ -111,5 +111,7 @@ In terms of integration testing I spent a large chunk of time testing and ensuri
 
 ## Sources
 https://github.com/jadianes/winerama-recommender-tutorial/tree/master/winerama
+
 https://github.com/wkudaka/django-scikit-learn-tutorial
+
 http://cseweb.ucsd.edu/classes/sp15/cse190-c/reports/sp15/048.pdf
